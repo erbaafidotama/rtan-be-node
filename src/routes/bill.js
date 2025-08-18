@@ -90,7 +90,7 @@ router.post("/", withCreatorUpdaterNames, async (req, res) => {
       contributionId,
       period,
       status,
-      paymentFinishDate,
+      paymentFinishDate: paymentFinishDate ? new Date(paymentFinishDate) : null,
       description,
       billUUID: uuidv4(),
       createdBy: req.user.id, // Set createdBy to the ID of the logged-in user

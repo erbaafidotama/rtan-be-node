@@ -26,6 +26,9 @@ router.get("/search", withCreatorUpdaterNames, async (req, res) => {
       "dateIn",
       "dateOut",
       "active",
+      "noKTP",
+      "address",
+      "phone",
     ];
 
     // Add each provided search parameter to the where clause
@@ -52,8 +55,19 @@ router.get("/search", withCreatorUpdaterNames, async (req, res) => {
 // Create a resident (hanya untuk admin)
 router.post("/", withCreatorUpdaterNames, async (req, res) => {
   try {
-    const { firstName, lastName, noKK, noNIK, noHouse, dateIn, dateOut } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      noKK,
+      noNIK,
+      noHouse,
+      dateIn,
+      dateOut,
+      noKTP,
+      address,
+      phone,
+      active,
+    } = req.body;
 
     const residentData = await resident.create({
       firstName,
@@ -63,8 +77,11 @@ router.post("/", withCreatorUpdaterNames, async (req, res) => {
       noHouse,
       dateIn,
       dateOut,
+      noKTP,
+      address,
+      phone,
       residentUUID: uuidv4(),
-      active: true,
+      active,
       createdBy: req.user.id, // Set createdBy to the ID of the logged-in user
       updatedBy: req.user.id, // Also set updatedBy for the initial creation
     });
@@ -125,6 +142,9 @@ router.put("/:residentUUID", withCreatorUpdaterNames, async (req, res) => {
       dateIn,
       dateOut,
       active,
+      noKTP,
+      address,
+      phone,
     } = req.body;
 
     const [updated] = await resident.update(
@@ -137,6 +157,9 @@ router.put("/:residentUUID", withCreatorUpdaterNames, async (req, res) => {
         dateIn,
         dateOut,
         active,
+        noKTP,
+        address,
+        phone,
         updatedBy: req.user.id, // Set updatedBy to the ID of the logged-in user
       },
       {
