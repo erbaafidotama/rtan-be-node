@@ -27,9 +27,13 @@ router.get("/", withCreatorUpdaterNames, async (req, res) => {
     // Add each provided search parameter to the where clause
     searchableFields.forEach((field) => {
       if (req.query[field] !== undefined) {
-        whereClause[field] = {
-          [Op.like]: `%${req.query[field]}%`,
-        };
+        if (field === "contributionId") {
+          whereClause[field] = parseInt(req.query[field]);
+        } else {
+          whereClause[field] = {
+            [Op.like]: `%${req.query[field]}%`,
+          };
+        }
       }
     });
 
@@ -89,27 +93,26 @@ router.post("/", withCreatorUpdaterNames, async (req, res) => {
     const billData = await bill.findAll({
       where: { residentId, contributionId, period },
     });
-
-    if (!billData || billData.length === 0) {
+    console.log("billData", billData);
+    if (billData.length > 0) {
       return res
         .status(404)
-        .json({ error: "No bills found for this resident and contribution" });
+        .json({ error: "Bills for Resident and Contribution already exists" });
     } else {
-      const billData = await bill.create({
-        residentId,
-        contributionId,
-        period,
-        status,
-        paymentFinishDate: paymentFinishDate
-          ? new Date(paymentFinishDate)
-          : null,
-        description,
-        billUUID: uuidv4(),
-        createdBy: req.user.id, // Set createdBy to the ID of the logged-in user
-        updatedBy: req.user.id, // Also set updatedBy for the initial creation
-      });
-
-      res.status(201).json(billData);
+      // const billData = await bill.create({
+      //   residentId,
+      //   contributionId,
+      //   period,
+      //   status,
+      //   paymentFinishDate: paymentFinishDate
+      //     ? new Date(paymentFinishDate)
+      //     : null,
+      //   description,
+      //   billUUID: uuidv4(),
+      //   createdBy: req.user.id, // Set createdBy to the ID of the logged-in user
+      //   updatedBy: req.user.id, // Also set updatedBy for the initial creation
+      // });
+      // res.status(201).json(billData);
     }
   } catch (err) {
     // Handle duplicate email etc.

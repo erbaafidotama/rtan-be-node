@@ -2,7 +2,7 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
 
-const { payment, user, contribution } = require("../../models");
+const { payment, user, bill, contribution } = require("../../models");
 const { Op } = require("sequelize");
 const withCreatorUpdaterNames = require("../middleware/responseFormatter")(
   user
@@ -40,15 +40,12 @@ router.get("/", withCreatorUpdaterNames, async (req, res) => {
 
     const enrichedPayments = await Promise.all(
       payments.map(async (payment) => {
-        // Get contribution data
-        const contributionData = await contribution.findByPk(
-          payment.contributionId
-        );
+        // Get bill data
+        const billData = await bill.findByPk(payment.billId);
 
         return {
           ...payment.dataValues,
-          contribution: contributionData,
-          contributionName: contributionData.contributionName,
+          bill: billData,
         };
       })
     );

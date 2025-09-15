@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   payment.init(
     {
       paymentUUID: DataTypes.UUID,
-      contributionId: DataTypes.INTEGER,
+      billId: DataTypes.INTEGER,
       paymentAmount: DataTypes.DECIMAL,
       method: DataTypes.STRING,
       paymentDate: DataTypes.DATE,
