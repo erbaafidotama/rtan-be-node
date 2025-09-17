@@ -2,7 +2,7 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
 
-const { payment, user, bill, contribution } = require("../../models");
+const { payment, user, bill, resident, contribution } = require("../../models");
 const { Op } = require("sequelize");
 const withCreatorUpdaterNames = require("../middleware/responseFormatter")(
   user
@@ -43,9 +43,18 @@ router.get("/", withCreatorUpdaterNames, async (req, res) => {
         // Get bill data
         const billData = await bill.findByPk(payment.billId);
 
+        // Get Contribution data
+        const contributionData = await contribution.findByPk(
+          billData.contributionId
+        );
+
+        const residentData = await resident.findByPk(billData.residentId);
+        console.log("residentData", residentData);
         return {
           ...payment.dataValues,
           bill: billData,
+          residentName: residentData.firstName + " " + residentData.lastName,
+          contributionName: contributionData.contributionName,
         };
       })
     );
