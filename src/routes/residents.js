@@ -11,11 +11,11 @@ const withCreatorUpdaterNames = require("../middleware/responseFormatter")(
 // Find resident by all fields can 1 field or more
 // Example: GET /residents/search?firstName=John&lastName=Doe
 // Example: GET /residents/search?noKK=12345
-router.get("/search", withCreatorUpdaterNames, async (req, res) => {
+router.get("/", withCreatorUpdaterNames, async (req, res) => {
   try {
     // Build the where clause dynamically based on provided query params
     const whereClause = {};
-
+    console.log("req", req.query);
     // List of fields to search on
     const searchableFields = [
       "firstName",
@@ -35,7 +35,7 @@ router.get("/search", withCreatorUpdaterNames, async (req, res) => {
     searchableFields.forEach((field) => {
       if (req.query[field] !== undefined) {
         whereClause[field] = {
-          [Op.like]: `%${req.query[field]}%`,
+          [Op.iLike]: `%${req.query[field]}%`,
         };
       }
     });

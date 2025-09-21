@@ -80,10 +80,10 @@ router.get("/:paymentUUID", withCreatorUpdaterNames, async (req, res) => {
 // Create a payment (hanya untuk admin)
 router.post("/", withCreatorUpdaterNames, async (req, res) => {
   try {
-    const { contributionId, paymentAmount, method, paymentDate, description } =
+    const { billId, paymentAmount, method, paymentDate, description } =
       req.body;
     const paymentData = await payment.create({
-      contributionId,
+      billId,
       paymentAmount,
       method,
       paymentDate,
@@ -107,11 +107,11 @@ router.post("/", withCreatorUpdaterNames, async (req, res) => {
 // Update a payment (hanya untuk admin)
 router.put("/:paymentUUID", withCreatorUpdaterNames, async (req, res) => {
   try {
-    const { contributionId, paymentAmount, method, paymentDate, description } =
+    const { billId, paymentAmount, method, paymentDate, description } =
       req.body;
     const paymentData = await payment.update(
       {
-        contributionId,
+        billId,
         paymentAmount,
         method,
         paymentDate,
