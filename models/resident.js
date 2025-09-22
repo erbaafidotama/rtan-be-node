@@ -28,6 +28,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       noKTP: DataTypes.STRING,
+      headFamily: DataTypes.BOOLEAN,
+      residentId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "residents",
+          key: "id",
+        },
+      },
       address: DataTypes.TEXT,
       phone: DataTypes.STRING,
       noHouse: DataTypes.STRING,

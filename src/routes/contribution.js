@@ -26,7 +26,7 @@ router.get("/", withCreatorUpdaterNames, async (req, res) => {
     searchableFields.forEach((field) => {
       if (req.query[field] !== undefined) {
         whereClause[field] = {
-          [Op.like]: `%${req.query[field]}%`,
+          [Op.iLike]: `%${req.query[field]}%`,
         };
       }
     });

@@ -45,7 +45,24 @@ router.get("/", withCreatorUpdaterNames, async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    res.json(residents);
+    const residentsWithFamily = await Promise.all(
+      residents.map(async (residentData) => {
+        if (residentData.headFamily) {
+          const data = await resident.findAll({
+            where: {
+              residentId: residentData.id,
+            },
+          });
+          return {
+            ...residentData.dataValues,
+            familyMembers: data,
+          };
+        }
+        return residentData.dataValues;
+      })
+    );
+
+    res.json(residentsWithFamily);
   } catch (error) {
     console.error("Search error:", error);
     res.status(500).json({ error: error.message });
@@ -67,6 +84,8 @@ router.post("/", withCreatorUpdaterNames, async (req, res) => {
       address,
       phone,
       active,
+      residentId,
+      headFamily,
     } = req.body;
 
     const residentData = await resident.create({
@@ -82,6 +101,8 @@ router.post("/", withCreatorUpdaterNames, async (req, res) => {
       phone,
       residentUUID: uuidv4(),
       active,
+      residentId,
+      headFamily,
       createdBy: req.user.id, // Set createdBy to the ID of the logged-in user
       updatedBy: req.user.id, // Also set updatedBy for the initial creation
     });
@@ -145,6 +166,8 @@ router.put("/:residentUUID", withCreatorUpdaterNames, async (req, res) => {
       noKTP,
       address,
       phone,
+      residentId,
+      headFamily,
     } = req.body;
 
     const [updated] = await resident.update(
@@ -160,6 +183,8 @@ router.put("/:residentUUID", withCreatorUpdaterNames, async (req, res) => {
         noKTP,
         address,
         phone,
+        residentId,
+        headFamily,
         updatedBy: req.user.id, // Set updatedBy to the ID of the logged-in user
       },
       {

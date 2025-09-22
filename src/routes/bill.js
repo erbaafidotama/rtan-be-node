@@ -31,7 +31,7 @@ router.get("/", withCreatorUpdaterNames, async (req, res) => {
           whereClause[field] = parseInt(req.query[field]);
         } else {
           whereClause[field] = {
-            [Op.like]: `%${req.query[field]}%`,
+            [Op.iLike]: `%${req.query[field]}%`,
           };
         }
       }
