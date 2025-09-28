@@ -111,20 +111,20 @@ router.post("/", withCreatorUpdaterNames, async (req, res) => {
         .status(404)
         .json({ error: "Bills for Resident and Contribution already exists" });
     } else {
-      // const billData = await bill.create({
-      //   residentId,
-      //   contributionId,
-      //   period,
-      //   status,
-      //   paymentFinishDate: paymentFinishDate
-      //     ? new Date(paymentFinishDate)
-      //     : null,
-      //   description,
-      //   billUUID: uuidv4(),
-      //   createdBy: req.user.id, // Set createdBy to the ID of the logged-in user
-      //   updatedBy: req.user.id, // Also set updatedBy for the initial creation
-      // });
-      // res.status(201).json(billData);
+      const billData = await bill.create({
+        residentId,
+        contributionId,
+        period,
+        status,
+        paymentFinishDate: paymentFinishDate
+          ? new Date(paymentFinishDate)
+          : null,
+        description,
+        billUUID: uuidv4(),
+        createdBy: req.user.id, // Set createdBy to the ID of the logged-in user
+        updatedBy: req.user.id, // Also set updatedBy for the initial creation
+      });
+      res.status(201).json(billData);
     }
   } catch (err) {
     // Handle duplicate email etc.

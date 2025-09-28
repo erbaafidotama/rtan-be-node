@@ -26,8 +26,8 @@ const paymentRoutes = require("./routes/payment");
 // Apply authentication middleware to protected routes
 app.use("/users", authenticateToken, userRoutes);
 app.use("/residents", authenticateToken, residentRoutes);
-app.use("/contribution", authenticateToken, contributionRoutes);
-app.use("/bill", authenticateToken, billRoutes);
-app.use("/payment", authenticateToken, paymentRoutes);
+app.use("/contributions", authenticateToken, contributionRoutes);
+app.use("/bills", authenticateToken, billRoutes);
+app.use("/payments", authenticateToken, paymentRoutes);
 
 module.exports = app;

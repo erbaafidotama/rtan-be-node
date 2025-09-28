@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       contributionId: DataTypes.INTEGER,
       period: DataTypes.DATE,
       status: {
-        type: DataTypes.ENUM("Unpaid", "Paid", "Pending"),
+        type: DataTypes.ENUM("Unpaid", "Paid", "Partial Paid"),
         allowNull: false,
         defaultValue: "Unpaid",
       },
